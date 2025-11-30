@@ -1,3 +1,5 @@
+import gsap from "gsap";
+
 // Select the "Repeat" button
 const repeat = document.querySelector(".repeat");
 
@@ -45,6 +47,15 @@ function renderChart() {
     wrapper.appendChild(bar);
     wrapper.appendChild(label);
     chart.appendChild(wrapper);
+
+      gsap.to(bar , {
+        duration : 2,
+        scaleY :1,
+        y: -8,
+        ease : 'elastic.Out(1, 1.5)',
+        delay : i * 0.5,
+      })
+
 
     // 👇 This is where GSAP animation will go later
   });
