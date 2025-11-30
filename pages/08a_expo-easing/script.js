@@ -1,3 +1,5 @@
+import gsap from "gsap";
+
 // Select the main floating action button (FAB)
 const fab = document.querySelector(".fab");
 
@@ -26,14 +28,29 @@ fab.addEventListener("click", () => {
       const angle = startAngle - i * (arcSpan / (children.length - 1));
 
       // Polar to Cartesian conversion
-      const x = Math.cos(angle) * radius;
       const y = -Math.sin(angle) * radius;
+      const x = Math.cos(angle) * radius;
 
       // 🔜 Animation will go here
+      gsap.to(child,{
+        x :x ,
+        y : y,
+        duration : 0.5,
+        opacity : 1,
+        ease : 'expo.out',
+        rotation : 180
+      })
     });
   } else {
     children.forEach((child) => {
       // 🔜 Collapse animation will go here
+      gsap.to(child,{
+        x : 0,
+        y: 0,
+        opacity : 0,
+        duration : 0.3,
+        ease : 'expo.in'
+      })
     });
   }
 });
