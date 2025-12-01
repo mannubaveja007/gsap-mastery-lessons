@@ -1,3 +1,5 @@
+import gsap from "gsap";
+
 // Get DOM elements
 const dock = document.querySelector(".dock"); // The dock container at the bottom
 const icons = document.querySelectorAll(".icon"); // Individual icons inside the dock
@@ -10,9 +12,51 @@ let isTriggerHovered = false;     // Is the user hovering the trigger area?
 let isReadyForHover = false;      // Should proximity scaling be active?
 let hasDockEntered = false;       // Tracks if the dock has been hovered at least once
 
+function hideDock() {
+  isDockVisible = false;
+  isReadyForHover = false;
+
+  gsap.to(dock, {
+    bottom: "-150px", // Move back to initial CSS position
+    duration: 0.5,
+    ease: "power2.in",
+  });
+
+  gsap.to(icons, {
+    scale: 0,
+    opacity: 0,
+    duration: 0.3,
+  });
+}
+
+function showDock() {
+  gsap.to(dock, {
+    opacity: 1,
+    scale: 1,
+    ease: "power2.out",
+    bottom: "50px",
+    duration: 1,
+    onComplete: () => {
+      isReadyForHover = true;
+    },
+  });
+
+  gsap.to(icons, {
+    opacity: 1,
+    scale: 1,
+    transformOrigin: "bottom",
+    stagger: {
+      each: 0.1,
+      from: "center",
+      ease: "power2.inOut",
+    },
+  });
+}
+
 // Mouse enters the trigger area (above the dock)
 trigger.addEventListener("mouseenter", () => {
   isTriggerHovered = true;
+  console.log("Trigged Bhenchooo");
 
   if (!isDockVisible) {
     isDockVisible = true;
@@ -38,6 +82,12 @@ dock.addEventListener("mouseenter", () => {
 dock.addEventListener("mouseleave", () => {
   isDockHovered = false;
 
+  // Reset scale when mouse leaves the dock
+  gsap.to(icons, {
+    scale: 1,
+    duration: 0.3,
+  });
+
   if (!isTriggerHovered) hideDock();
 });
 
@@ -57,6 +107,10 @@ dock.addEventListener("mousemove", (e) => {
 
     const scale = Math.max(1, 1.7 - distance / maxDistance);
 
-    // We'll animate this part using GSAP later
+    // Apply the scale
+    gsap.to(icon, {
+      scale: scale,
+      duration: 0.1,
+    });
   });
 });
